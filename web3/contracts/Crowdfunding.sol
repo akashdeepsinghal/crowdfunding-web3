@@ -11,7 +11,7 @@ contract Crowdfunding {
         uint256 amountCollected;
         string image;
         address[] donors;
-        address[] donations;
+        uint256[] donations;
     }
 
     mapping(uint256 => Campaign) public campaigns;
@@ -43,9 +43,20 @@ contract Crowdfunding {
         return numberOfCampaigns - 1;
     }
 
-    function getCampaigns() {}
+    function donateToCampaign(uint256 _id) public payable {
+        uint256 amount = msg.value;
+        Campaign storage campaign = campaigns[_id];
 
-    function donateToCampaign() {}
+        campaign.donors.push(msg.sender);
+        campaign.donations.push(amount);
+
+        (bool sent, ) = payable(campaign.owner).call{value: amount}("");
+        if (sent) {
+            campaign.amountCollected += amount;
+        } else {}
+    }
+
+    function getCampaigns() {}
 
     function getDonors() {}
 }
