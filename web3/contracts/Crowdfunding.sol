@@ -29,7 +29,7 @@ contract Crowdfunding {
         Campaign storage campaign = campaigns[numberOfCampaigns];
 
         // Checks
-        require(_deadline < block.timestamp, "Deadline can not be in past");
+        require(_deadline > block.timestamp, "Deadline can not be in past");
         campaign.owner = _owner;
         campaign.title = _title;
         campaign.description = _description;
